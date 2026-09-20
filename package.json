@@ -1,0 +1,12 @@
+{
+  "name": "velorent-workspace",
+  "version": "1.0.0",
+  "private": true,
+  "description": "VeloRent - Smart Vehicle Rental Management System",
+  "scripts": {
+    "server": "npm run dev --prefix server",
+    "client": "npm run dev --prefix client",
+    "build": "npm run build --prefix client",
+    "lint": "npm run lint --prefix client"
+  }
+}
