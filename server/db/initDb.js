@@ -1,63 +1,47 @@
 const fs = require('fs');
 const path = require('path');
-const mysql = require('mysql2/promise');
+const { Client } = require('pg');
 require('dotenv').config({ path: path.join(__dirname, '..', '.env') });
 
 async function initDatabase() {
-  const host = process.env.DB_HOST || 'localhost';
-  const port = parseInt(process.env.DB_PORT || '3306', 10);
-  const user = process.env.DB_USER || 'root';
-  const password = process.env.DB_PASSWORD || '';
-  const database = process.env.DB_NAME || 'velorent';
+  console.log(`\n⏳ Connecting to PostgreSQL (Supabase)...`);
 
-  console.log(`\n⏳ Connecting to MySQL at ${host}:${port} as user "${user}"...`);
-
-  let connection;
+  let client;
   try {
-    // 1. Initial connection without database to create it if needed
-    connection = await mysql.createConnection({
-      host,
-      port,
-      user,
-      password,
-      multipleStatements: true
+    client = new Client({
+      connectionString: process.env.DATABASE_URL
     });
+    
+    await client.connect();
+    console.log('✅ Connected to PostgreSQL server successfully!');
 
-    console.log('✅ Connected to MySQL server successfully!');
-
-    // 2. Create database if it does not exist
-    await connection.query(`CREATE DATABASE IF NOT EXISTS \`${database}\`;`);
-    console.log(`✅ Database "${database}" verified/created.`);
-
-    await connection.query(`USE \`${database}\`;`);
-
-    // 3. Execute schema.sql
+    // Execute schema.sql
     const schemaPath = path.join(__dirname, 'schema.sql');
     if (fs.existsSync(schemaPath)) {
       const schemaSql = fs.readFileSync(schemaPath, 'utf8');
-      await connection.query(schemaSql);
+      await client.query(schemaSql);
       console.log('✅ Database schema and tables applied successfully.');
     } else {
       console.warn('⚠️ schema.sql not found at:', schemaPath);
     }
 
-    // 4. Check if data already exists, if not run seed.sql
-    const [existingUsers] = await connection.query('SELECT COUNT(*) as count FROM users');
-    if (existingUsers[0].count === 0) {
+    // Check if data already exists, if not run seed.sql
+    const { rows: existingUsers } = await client.query('SELECT COUNT(*) as count FROM users');
+    if (parseInt(existingUsers[0].count) === 0) {
       const seedPath = path.join(__dirname, 'seed.sql');
       if (fs.existsSync(seedPath)) {
         const seedSql = fs.readFileSync(seedPath, 'utf8');
-        await connection.query(seedSql);
+        await client.query(seedSql);
         console.log('✅ Seed data imported successfully (Users, Vehicles, Bookings, Payments).');
       }
     } else {
       console.log(`ℹ️ Tables already contain records (${existingUsers[0].count} users). Skipping seed.`);
     }
 
-    // 5. Verification summary
-    const [userCount] = await connection.query('SELECT COUNT(*) as count FROM users');
-    const [vehicleCount] = await connection.query('SELECT COUNT(*) as count FROM vehicles');
-    const [bookingCount] = await connection.query('SELECT COUNT(*) as count FROM bookings');
+    // Verification summary
+    const { rows: userCount } = await client.query('SELECT COUNT(*) as count FROM users');
+    const { rows: vehicleCount } = await client.query('SELECT COUNT(*) as count FROM vehicles');
+    const { rows: bookingCount } = await client.query('SELECT COUNT(*) as count FROM bookings');
 
     console.log(`
 🎉 Database setup complete!
@@ -66,18 +50,12 @@ async function initDatabase() {
    - Bookings: ${bookingCount[0].count}
 `);
 
-    await connection.end();
+    await client.end();
     process.exit(0);
   } catch (error) {
     console.error('\n❌ Database initialization failed:');
     console.error(`   ${error.message}`);
-    if (error.code === 'ER_ACCESS_DENIED_ERROR') {
-      console.error(`
-💡 Tip: Access was denied for user "${user}".
-   Please update DB_PASSWORD in "server/.env" with your actual MySQL root password and run again.
-`);
-    }
-    if (connection) await connection.end().catch(() => {});
+    if (client) await client.end().catch(() => {});
     process.exit(1);
   }
 }

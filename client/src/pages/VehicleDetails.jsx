@@ -96,16 +96,33 @@ export default function VehicleDetails() {
         {/* Left Column: Image & Specifications */}
         <div className="lg:col-span-7 flex flex-col gap-8 animate-fade-in">
           
-          {/* Main Vehicle Image */}
-          <div className="w-full aspect-[16/10] rounded-3xl overflow-hidden glass-panel p-2 shadow-2xl relative">
-            <img
-              src={vehicle.image_url || 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800'}
-              alt={`${vehicle.brand} ${vehicle.model}`}
-              className="w-full h-full object-cover rounded-2xl"
-            />
-            {!vehicle.is_available && (
-              <div className="absolute inset-0 bg-black/60 flex items-center justify-center text-red-400 font-extrabold text-2xl tracking-widest backdrop-blur-sm rounded-2xl">
-                OUT OF SERVICE / RESERVED
+          {/* Main Vehicle Image and Gallery */}
+          <div className="w-full flex flex-col gap-4">
+            <div className="w-full aspect-[16/10] rounded-3xl overflow-hidden glass-panel p-2 shadow-2xl relative">
+              <img
+                src={vehicle.image_url || 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800'}
+                alt={`${vehicle.brand} ${vehicle.model}`}
+                className="w-full h-full object-cover rounded-2xl"
+              />
+              {!vehicle.is_available && (
+                <div className="absolute inset-0 bg-black/60 flex items-center justify-center text-red-400 font-extrabold text-2xl tracking-widest backdrop-blur-sm rounded-2xl">
+                  OUT OF SERVICE / RESERVED
+                </div>
+              )}
+            </div>
+
+            {/* Gallery Thumbnails */}
+            {vehicle.gallery_urls && vehicle.gallery_urls.length > 0 && (
+              <div className="grid grid-cols-4 gap-4 mt-2">
+                {vehicle.gallery_urls.slice(0, 4).map((url, index) => (
+                  <div key={index} className="aspect-[16/10] rounded-2xl overflow-hidden glass-panel p-1.5 cursor-pointer hover:border-primary/50 transition-all">
+                    <img 
+                      src={url} 
+                      alt={`Gallery view ${index + 1}`} 
+                      className="w-full h-full object-cover rounded-xl"
+                    />
+                  </div>
+                ))}
               </div>
             )}
           </div>

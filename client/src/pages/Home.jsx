@@ -62,7 +62,7 @@ export default function Home() {
           <div className="relative flex justify-center items-center">
             <div className="relative w-full max-w-xl aspect-[16/10] rounded-3xl overflow-hidden glass-panel p-2 shadow-2xl">
               <img
-                src="https://images.unsplash.com/photo-1503376763036-066120622c74?q=80&w=2070&auto=format&fit=crop"
+                src="https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?w=1600&auto=format&fit=crop"
                 alt="Porsche 911 Hero"
                 className="w-full h-full object-cover rounded-2xl shadow-xl animate-float"
               />
