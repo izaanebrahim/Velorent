@@ -1,6 +1,6 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { Star, Fuel, Settings, Users, ArrowRight } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Fuel, Settings, Users } from 'lucide-react';
 
 export default function VehicleCard({ vehicle }) {
   const {
@@ -12,85 +12,74 @@ export default function VehicleCard({ vehicle }) {
     fuel_type,
     transmission,
     seats,
-    rating,
     image_url,
     is_available
   } = vehicle;
 
+  const navigate = useNavigate();
+
   return (
-    <div className="glass-panel group rounded-3xl overflow-hidden flex flex-col h-full hover:-translate-y-2 transition-all duration-300">
+    <div 
+      onClick={() => navigate(`/vehicles/${id}`)}
+      className="bg-bg-secondary border border-border-glass rounded-xl overflow-hidden flex flex-col h-full hover:border-border-glass/80 transition-colors group cursor-pointer"
+    >
       {/* Vehicle Image Container */}
-      <div className="relative h-56 w-full overflow-hidden bg-bg-secondary">
+      <div className="relative h-56 w-full overflow-hidden bg-bg-main border-b border-border-glass">
         <img
-          src={image_url || 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800'}
+          src={image_url || '/images/vehicles/porsche_911.jpg'}
           alt={`${brand} ${model}`}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+          className="w-full h-full object-contain object-center group-hover:scale-[1.03] transition-transform duration-500 ease-out"
           onError={(e) => {
-            e.target.src = 'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=800'; // fallback SUV
+            e.target.src = '/images/vehicles/mahindra_thar.jpg'; // fallback SUV
           }}
         />
         {/* Availability Badge */}
         <span
-          className={`absolute top-4 left-4 text-xs font-bold px-3 py-1.5 rounded-full backdrop-blur-md border ${
+          className={`absolute top-4 left-4 text-xs font-semibold px-2.5 py-1 rounded-md shadow-sm ${
             is_available
-              ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
-              : 'bg-red-500/10 text-red-400 border-red-500/20'
+              ? 'bg-emerald-100 text-emerald-800'
+              : 'bg-red-100 text-red-800'
           }`}
         >
           {is_available ? 'Available' : 'Booked'}
         </span>
-        {/* Category Tag */}
-        <span className="absolute top-4 right-4 text-xs font-bold px-3 py-1.5 rounded-full bg-black/60 text-white backdrop-blur-md border border-white/10">
-          {category}
-        </span>
       </div>
 
       {/* Info Content */}
-      <div className="p-6 flex flex-col flex-grow">
-        {/* Brand & Rating */}
-        <div className="flex justify-between items-center gap-2 mb-2">
-          <span className="text-xs uppercase tracking-widest text-primary font-bold">{brand}</span>
-          <div className="flex items-center gap-1 text-yellow-400 text-sm font-semibold">
-            <Star className="w-4 h-4 fill-yellow-400 stroke-none" />
-            <span>{Number(rating).toFixed(1)}</span>
-          </div>
+      <div className="p-5 flex flex-col flex-grow">
+        
+        <div className="flex justify-between items-start mb-1">
+          <span className="text-xs font-semibold text-text-muted uppercase tracking-wider">{category}</span>
         </div>
 
-        {/* Model Title */}
-        <h3 className="text-xl font-bold text-white mb-4 line-clamp-1">
+        {/* Title */}
+        <h3 className="text-lg font-bold text-text-main mb-4 leading-tight">
           {brand} {model}
         </h3>
 
-        {/* Vehicle Specs Grid */}
-        <div className="grid grid-cols-3 gap-2 py-4 mb-6 border-y border-white/5 text-xs text-text-muted">
-          <div className="flex flex-col items-center gap-1">
-            <Fuel className="w-4 h-4 text-primary" />
-            <span className="capitalize">{fuel_type}</span>
-          </div>
-          <div className="flex flex-col items-center gap-1">
-            <Settings className="w-4 h-4 text-primary" />
-            <span className="capitalize">{transmission}</span>
-          </div>
-          <div className="flex flex-col items-center gap-1">
-            <Users className="w-4 h-4 text-primary" />
-            <span>{seats} Seats</span>
-          </div>
+        {/* Vehicle Specs Text instead of Grid Icons (Cleaner) */}
+        <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mb-6 text-sm text-text-muted">
+          <span className="capitalize">{transmission}</span>
+          <span className="text-border-glass">•</span>
+          <span className="capitalize">{fuel_type}</span>
+          <span className="text-border-glass">•</span>
+          <span>{seats} Seats</span>
         </div>
 
         {/* Pricing and Action Button */}
-        <div className="flex justify-between items-center mt-auto">
+        <div className="flex justify-between items-end mt-auto pt-4 border-t border-border-glass">
           <div>
-            <span className="text-xs text-text-muted block">Daily Rate</span>
-            <div className="text-xl font-bold text-white">
-              ₹{Number(price_per_day).toLocaleString('en-IN')}{' '}
-              <span className="text-xs text-text-muted font-normal">/ day</span>
+            <div className="text-lg font-bold text-text-main">
+              ₹{Number(price_per_day).toLocaleString('en-IN')}
             </div>
+            <span className="text-xs text-text-muted">per day</span>
           </div>
           <Link
             to={`/vehicles/${id}`}
-            className="flex items-center justify-center p-3.5 rounded-full bg-white/5 hover:bg-primary hover:text-black text-white hover:scale-105 transition-all duration-300"
+            onClick={(e) => e.stopPropagation()}
+            className="btn-primary text-sm px-4 py-2"
           >
-            <ArrowRight className="w-5 h-5" />
+            View Details
           </Link>
         </div>
       </div>

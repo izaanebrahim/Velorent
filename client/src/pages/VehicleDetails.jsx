@@ -100,9 +100,9 @@ export default function VehicleDetails() {
           <div className="w-full flex flex-col gap-4">
             <div className="w-full aspect-[16/10] rounded-3xl overflow-hidden glass-panel p-2 shadow-2xl relative">
               <img
-                src={vehicle.image_url || 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800'}
+                src={vehicle.image_url || '/images/vehicles/porsche_911.jpg'}
                 alt={`${vehicle.brand} ${vehicle.model}`}
-                className="w-full h-full object-cover rounded-2xl"
+                className="w-full h-full object-contain object-center rounded-2xl"
               />
               {!vehicle.is_available && (
                 <div className="absolute inset-0 bg-black/60 flex items-center justify-center text-red-400 font-extrabold text-2xl tracking-widest backdrop-blur-sm rounded-2xl">

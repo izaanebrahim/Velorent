@@ -84,7 +84,7 @@ export default function ManageVehicles() {
         fuel_type: fuelType,
         transmission,
         seats: Number(seats),
-        image_url: imageUrl || 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800',
+        image_url: imageUrl || '/images/vehicles/porsche_911.jpg',
         description,
         location
       };

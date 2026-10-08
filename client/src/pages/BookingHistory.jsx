@@ -114,7 +114,7 @@ export default function BookingHistory() {
                 {/* Vehicle image */}
                 <div className="w-full md:w-56 h-36 rounded-2xl overflow-hidden shrink-0 bg-bg-secondary border border-white/5">
                   <img
-                    src={booking.image_url || 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=400'}
+                    src={booking.image_url || '/images/vehicles/porsche_911.jpg'}
                     alt={`${booking.brand} ${booking.model}`}
                     className="w-full h-full object-cover"
                   />

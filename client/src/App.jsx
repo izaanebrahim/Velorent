@@ -15,6 +15,8 @@ import Register from './pages/Register';
 import Vehicles from './pages/Vehicles';
 import VehicleDetails from './pages/VehicleDetails';
 import Booking from './pages/Booking';
+import About from './pages/About';
+import Contact from './pages/Contact';
 import Profile from './pages/Profile';
 import BookingHistory from './pages/BookingHistory';
 
@@ -98,6 +100,8 @@ function AppRoutes() {
         <Route path="/register" element={<Register />} />
         <Route path="/vehicles" element={<Vehicles />} />
         <Route path="/vehicles/:id" element={<VehicleDetails />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/contact" element={<Contact />} />
         
         {/* Protected Routes */}
         <Route path="/booking/:vehicleId" element={<ProtectedRoute><Booking /></ProtectedRoute>} />
