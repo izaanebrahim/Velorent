@@ -105,7 +105,7 @@ export default function Footer() {
 
       <div className="border-t border-white/5 py-6">
         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-text-muted">
-          <p>&copy; {new Date().getFullYear()} VeloRent. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} VeloRent. All rights reserved. <span className="ml-2 text-primary/80 font-medium">Built by Nazzm Systems.</span></p>
           <div className="flex gap-6">
             <a href="#" className="hover:text-primary transition-colors">Privacy Policy</a>
             <a href="#" className="hover:text-primary transition-colors">Terms of Service</a>

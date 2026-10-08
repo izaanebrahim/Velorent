@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../services/api';
 import VehicleCard from '../components/shared/VehicleCard';
-import { ArrowRight, Search, ShieldCheck, Zap, CreditCard, Clock, Star } from 'lucide-react';
+import { ArrowRight, Search, ShieldCheck, Zap, CreditCard, Clock, Star, MapPin, Calendar } from 'lucide-react';
 
 export default function Home() {
   const [featuredVehicles, setFeaturedVehicles] = useState([]);
@@ -27,46 +27,66 @@ export default function Home() {
   return (
     <div className="flex flex-col min-h-screen">
       {/* Hero Section */}
-      <section className="relative overflow-hidden min-h-[95vh] flex items-center justify-center pt-24 px-6 md:px-12">
-        {/* Glow Effects */}
-        <div className="absolute top-[20%] left-[10%] w-72 h-72 rounded-full bg-primary/20 blur-[120px] pointer-events-none animate-pulse"></div>
-        <div className="absolute bottom-[20%] right-[10%] w-96 h-96 rounded-full bg-accent/25 blur-[150px] pointer-events-none"></div>
+      <section className="relative min-h-[90vh] flex flex-col items-center justify-center pt-24 px-6">
+        {/* Full Background Image */}
+        <div className="absolute inset-0 w-full h-full z-0">
+          <img 
+            src="https://images.unsplash.com/photo-1503376713236-79b8849646b9?q=80&w=2070&auto=format&fit=crop" 
+            alt="Luxury Car Rental" 
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-bg-main/90 via-bg-main/70 to-bg-main"></div>
+        </div>
 
-        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center w-full z-10">
-          {/* Hero Left Content */}
-          <div className="flex flex-col gap-6 text-center lg:text-left">
-            <span className="text-xs uppercase tracking-widest text-primary font-bold bg-primary/10 border border-primary/20 px-4 py-2 rounded-full w-fit mx-auto lg:mx-0">
-              Introducing Premium Car & Bike Rental
-            </span>
-            <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight leading-[1.1] text-white">
-              Elevate Your <br />
-              <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                Journey
-              </span>
-            </h1>
-            <p className="text-text-muted text-base sm:text-lg max-w-lg mx-auto lg:mx-0 leading-relaxed">
-              Experience the ultimate freedom of premium vehicles. Explore handpicked sports cars, luxury sedans, off-road SUVs, and superbikes. No paperwork, fully digital reservation.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start items-center">
-              <Link to="/vehicles" className="btn btn-primary px-8 py-3.5 rounded-full flex items-center gap-2 font-bold w-full sm:w-auto text-center justify-center">
-                Explore Fleet
-                <ArrowRight className="w-5 h-5" />
-              </Link>
-              <a href="#how-it-works" className="btn btn-glass px-8 py-3.5 rounded-full font-bold w-full sm:w-auto text-center justify-center">
-                How It Works
-              </a>
+        <div className="relative z-10 max-w-4xl mx-auto text-center flex flex-col gap-6 mt-12">
+          <h1 className="text-5xl sm:text-7xl font-black tracking-tight leading-[1.1] text-white">
+            Find the perfect ride <br className="hidden sm:block" />
+            <span className="text-primary">for any occasion.</span>
+          </h1>
+          <p className="text-white/80 text-lg sm:text-xl max-w-2xl mx-auto font-medium">
+            India's largest marketplace for self-drive car and bike rentals. Book daily, weekly, or monthly.
+          </p>
+          
+          {/* Quick Search Bar */}
+          <div className="mt-8 glass-panel-heavy p-4 rounded-3xl sm:rounded-full flex flex-col sm:flex-row items-center gap-4 max-w-4xl mx-auto w-full shadow-2xl border border-white/20">
+            <div className="flex-1 w-full px-4 flex items-center gap-3 border-b sm:border-b-0 sm:border-r border-white/10 pb-3 sm:pb-0">
+              <MapPin className="w-5 h-5 text-primary shrink-0" />
+              <div className="flex flex-col text-left w-full">
+                <span className="text-[10px] uppercase tracking-wider text-text-muted font-bold mb-1">City</span>
+                <select className="bg-transparent text-white border-none outline-none p-0 focus:ring-0 text-sm font-bold cursor-pointer w-full appearance-none">
+                  <option className="bg-bg-secondary text-white" value="mumbai">Mumbai</option>
+                  <option className="bg-bg-secondary text-white" value="delhi">Delhi</option>
+                  <option className="bg-bg-secondary text-white" value="bangalore">Bangalore</option>
+                  <option className="bg-bg-secondary text-white" value="hyderabad">Hyderabad</option>
+                </select>
+              </div>
             </div>
+            
+            <div className="flex-1 w-full px-4 flex items-center gap-3 border-b sm:border-b-0 sm:border-r border-white/10 pb-3 sm:pb-0">
+              <Calendar className="w-5 h-5 text-primary shrink-0" />
+              <div className="flex flex-col text-left w-full">
+                <span className="text-[10px] uppercase tracking-wider text-text-muted font-bold mb-1">Pickup Date</span>
+                <input type="date" className="bg-transparent text-white border-none outline-none p-0 focus:ring-0 text-sm font-bold w-full cursor-pointer [&::-webkit-calendar-picker-indicator]:filter [&::-webkit-calendar-picker-indicator]:invert" />
+              </div>
+            </div>
+
+            <div className="flex-1 w-full px-4 flex items-center gap-3 border-b sm:border-b-0 border-white/10 pb-3 sm:pb-0">
+              <Clock className="w-5 h-5 text-primary shrink-0" />
+              <div className="flex flex-col text-left w-full">
+                <span className="text-[10px] uppercase tracking-wider text-text-muted font-bold mb-1">Pickup Time</span>
+                <input type="time" className="bg-transparent text-white border-none outline-none p-0 focus:ring-0 text-sm font-bold w-full cursor-pointer [&::-webkit-calendar-picker-indicator]:filter [&::-webkit-calendar-picker-indicator]:invert" />
+              </div>
+            </div>
+
+            <Link to="/vehicles" className="btn btn-primary px-8 py-4 sm:py-3.5 rounded-2xl sm:rounded-full flex items-center gap-2 font-bold w-full sm:w-auto justify-center hover:scale-105 transition-transform mt-2 sm:mt-0">
+              <Search className="w-5 h-5" />
+              Search
+            </Link>
           </div>
-
-          {/* Hero Right Image */}
-          <div className="relative flex justify-center items-center">
-            <div className="relative w-full max-w-xl aspect-[16/10] rounded-3xl overflow-hidden glass-panel p-2 shadow-2xl">
-              <img
-                src="https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?w=1600&auto=format&fit=crop"
-                alt="Porsche 911 Hero"
-                className="w-full h-full object-cover rounded-2xl shadow-xl animate-float"
-              />
-            </div>
+          
+          <div className="flex items-center justify-center gap-6 mt-6 text-sm font-bold text-white/80">
+            <span className="flex items-center gap-2 bg-white/5 px-3 py-1.5 rounded-full border border-white/10"><ShieldCheck className="w-4 h-4 text-primary" /> Fully Insured</span>
+            <span className="flex items-center gap-2 bg-white/5 px-3 py-1.5 rounded-full border border-white/10"><Zap className="w-4 h-4 text-primary" /> Instant Booking</span>
           </div>
         </div>
       </section>
@@ -111,7 +131,7 @@ export default function Home() {
             </div>
             <h3 className="text-lg font-bold text-white">1. Select Vehicle</h3>
             <p className="text-text-muted text-sm leading-relaxed">
-              Browse our premium collection of cars and bikes and choose the one that fits your style.
+              Choose from over 500+ fully inspected cars and bikes across your city based on your needs.
             </p>
           </div>
 
@@ -122,7 +142,7 @@ export default function Home() {
             </div>
             <h3 className="text-lg font-bold text-white">2. Pick Dates</h3>
             <p className="text-text-muted text-sm leading-relaxed">
-              Select your rental start and end dates. Real-time availability check prevents overlapping bookings.
+              Book for a few hours, days or weeks. Real-time inventory ensures zero last-minute cancellations.
             </p>
           </div>
 
@@ -133,18 +153,18 @@ export default function Home() {
             </div>
             <h3 className="text-lg font-bold text-white">3. Pay Securely</h3>
             <p className="text-text-muted text-sm leading-relaxed">
-              Complete your reservation with secure payment options like UPI, Cards, or Net Banking.
+              Pay a nominal security deposit. 100% transparent pricing with no hidden charges or fees.
             </p>
           </div>
 
           {/* Step 4 */}
           <div className="glass-panel p-8 rounded-3xl flex flex-col items-center text-center gap-4 relative">
             <div className="p-4 bg-accent/10 rounded-2xl text-accent border border-accent/20">
-              <ShieldCheck className="w-6 h-6" />
+              <MapPin className="w-6 h-6" />
             </div>
             <h3 className="text-lg font-bold text-white">4. Take Delivery</h3>
             <p className="text-text-muted text-sm leading-relaxed">
-              Grab the keys from your selected location or get it delivered to your doorstep. Happy renting!
+              Get the vehicle delivered to your doorstep or pick it up from our nearest city hub.
             </p>
           </div>
         </div>
@@ -194,9 +214,9 @@ export default function Home() {
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <div className="flex flex-col gap-6">
             <span className="text-xs uppercase tracking-widest text-primary font-bold">Why Choose Us</span>
-            <h2 className="text-3xl md:text-5xl font-bold text-white">Ride In Luxury. Worry Less.</h2>
+            <h2 className="text-3xl md:text-5xl font-bold text-white">The Most Trusted Self-Drive Platform.</h2>
             <p className="text-text-muted text-sm md:text-base leading-relaxed">
-              We focus on safety, security, and transparent rentals. Get fully maintained premium assets with zero hidden charges.
+              Enjoy unlimited kilometers, doorstep delivery, and 24/7 roadside assistance on every booking. We make rentals completely frictionless.
             </p>
 
             <div className="flex flex-col gap-4 mt-4">
@@ -212,6 +232,16 @@ export default function Home() {
 
               <div className="flex items-start gap-4">
                 <div className="p-2.5 bg-accent/10 rounded-xl text-accent border border-accent/20 mt-1">
+                  <MapPin className="w-5 h-5" />
+                </div>
+                <div>
+                  <h4 className="font-bold text-white">Doorstep Delivery</h4>
+                  <p className="text-text-muted text-xs md:text-sm mt-0.5">Don't want to travel to our hub? Get the vehicle delivered directly to your location.</p>
+                </div>
+              </div>
+              
+              <div className="flex items-start gap-4">
+                <div className="p-2.5 bg-primary/10 rounded-xl text-primary border border-primary/20 mt-1">
                   <Zap className="w-5 h-5" />
                 </div>
                 <div>
@@ -223,10 +253,10 @@ export default function Home() {
           </div>
 
           <div className="relative">
-            <div className="glass-panel p-4 rounded-3xl aspect-square w-full max-w-md mx-auto relative shadow-2xl">
+            <div className="glass-panel p-4 rounded-3xl aspect-[4/5] w-full max-w-md mx-auto relative shadow-2xl">
               <img
-                src="https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800"
-                alt="BMW Luxury interior"
+                src="https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=800"
+                alt="Luxury driving experience"
                 className="w-full h-full object-cover rounded-2xl"
               />
             </div>
