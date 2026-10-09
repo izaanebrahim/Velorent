@@ -38,69 +38,80 @@ const getAllVehicles = async (req, res, next) => {
       include_unapproved
     } = req.query;
 
-    const offset = (page - 1) * limit;
-    const conditions = [];
-    const params = [];
+    let filteredVehicles = [...mockVehicles];
 
     if (include_unapproved !== 'true') {
-      conditions.push('v.is_approved = TRUE');
+      filteredVehicles = filteredVehicles.filter(v => v.is_approved);
     }
 
     if (available !== 'false') {
-      conditions.push('v.is_available = TRUE');
+      filteredVehicles = filteredVehicles.filter(v => v.is_available);
     }
 
     if (category && category !== 'All') {
-      conditions.push('v.category = ?');
-      params.push(category);
+      filteredVehicles = filteredVehicles.filter(v => v.category === category);
     }
 
     if (type) {
-      conditions.push('v.type = ?');
-      params.push(type);
+      filteredVehicles = filteredVehicles.filter(v => v.type === type);
     }
 
     if (fuel_type) {
-      conditions.push('v.fuel_type = ?');
-      params.push(fuel_type);
+      filteredVehicles = filteredVehicles.filter(v => v.fuel_type === fuel_type);
     }
 
     if (transmission) {
-      conditions.push('v.transmission = ?');
-      params.push(transmission);
+      filteredVehicles = filteredVehicles.filter(v => v.transmission === transmission);
     }
 
     if (min_price) {
-      conditions.push('v.price_per_day >= ?');
-      params.push(parseFloat(min_price));
+      filteredVehicles = filteredVehicles.filter(v => v.price_per_day >= parseFloat(min_price));
     }
 
     if (max_price) {
-      conditions.push('v.price_per_day <= ?');
-      params.push(parseFloat(max_price));
+      filteredVehicles = filteredVehicles.filter(v => v.price_per_day <= parseFloat(max_price));
     }
 
     if (location) {
-      conditions.push('v.location LIKE ?');
-      params.push(`%${location}%`);
+      filteredVehicles = filteredVehicles.filter(v => v.location.toLowerCase().includes(location.toLowerCase()));
     }
 
     if (search) {
-      conditions.push('(v.brand LIKE ? OR v.model LIKE ? OR v.description LIKE ?)');
-      params.push(`%${search}%`, `%${search}%`, `%${search}%`);
+      const searchLower = search.toLowerCase();
+      filteredVehicles = filteredVehicles.filter(v => 
+        v.brand.toLowerCase().includes(searchLower) || 
+        v.model.toLowerCase().includes(searchLower) || 
+        v.description.toLowerCase().includes(searchLower)
+      );
     }
 
-    const whereClause = conditions.length > 0 ? 'WHERE ' + conditions.join(' AND ') : '';
+    if (sort === 'price_low') {
+      filteredVehicles.sort((a, b) => a.price_per_day - b.price_per_day);
+    } else if (sort === 'price_high') {
+      filteredVehicles.sort((a, b) => b.price_per_day - a.price_per_day);
+    } else if (sort === 'rating') {
+      filteredVehicles.sort((a, b) => b.rating - a.rating);
+    } else if (sort === 'name') {
+      filteredVehicles.sort((a, b) => a.brand.localeCompare(b.brand));
+    } else {
+      // newest
+      filteredVehicles.sort((a, b) => b.id - a.id);
+    }
 
-    // Count total and get vehicles - Bypassing DB to avoid timeout and slowness
+    const pageNum = parseInt(page);
+    const limitNum = parseInt(limit);
+    const startIndex = (pageNum - 1) * limitNum;
+    const endIndex = pageNum * limitNum;
+    const paginatedVehicles = filteredVehicles.slice(startIndex, endIndex);
+
     res.json({
       success: true,
-      data: mockVehicles,
+      data: paginatedVehicles,
       pagination: {
-        page: 1,
-        limit: mockVehicles.length,
-        total: mockVehicles.length,
-        pages: 1
+        page: pageNum,
+        limit: limitNum,
+        total: filteredVehicles.length,
+        pages: Math.ceil(filteredVehicles.length / limitNum)
       }
     });
   } catch (error) {
