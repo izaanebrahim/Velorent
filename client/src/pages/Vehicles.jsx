@@ -16,7 +16,7 @@ export default function Vehicles() {
   const [selectedCategory, setSelectedCategory] = useState(initialCategory);
   const [transmission, setTransmission] = useState('');
   const [fuelType, setFuelType] = useState('');
-  const [sort, setSort] = useState('newest');
+  const [sort, setSort] = useState('price_high');
   const [priceRange, setPriceRange] = useState(25000); // Max default price filter limit
 
   const handleCategorySelect = (cat) => {
@@ -65,7 +65,7 @@ export default function Vehicles() {
     setSelectedCategory('All');
     setTransmission('');
     setFuelType('');
-    setSort('newest');
+    setSort('price_high');
     setPriceRange(25000);
   };
 
